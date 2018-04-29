@@ -11,6 +11,7 @@
 
     <script type="text/javascript">
 
+        var user = "";
         var card1 = "";
         var score = 0;
         var moves = 0;
@@ -21,36 +22,37 @@
             // Knopka NEW GAME
             //---------------------------------------------------------
             $(".btn-primary").click(function() {
-                window.user=prompt("PLAYER NAME", "PLAYER1");
-                window.localStorage.setItem(window.user, 0);
-                $("#player").html(window.user);
+                user = prompt("PLAYER NAME", "PLAYER1");
+                localStorage.setItem(user, 0);
+                $("#info").html(user);
 
                 $("#container").html("");
                 $("#records").html("");
 
-                var history=[];
+                var history = [];
 
                 for (var i = 0; i < 30; i++) {
                     var x = (1 + Math.floor(Math.random()*5));
 
                     if ( history.filter(function (v) {return v==x}).length < 2 ) {
-                        $("#container").append('<div class="card" val="' + x + '"></div>');
+                        $("#container").append('<div class="card">' + x + '</div>');
                         history.push(x);
                     }
                 }
-
             });
 
+            //---------------------------------------------------------
             //knopra CLEAR
+            //---------------------------------------------------------
             $(".btn-danger").click(function() {
 
                     $("#container").html("");
                     $("#records").html("");
 
             });
-
-
+            //---------------------------------------------------------
             //knopka Recordy
+            //---------------------------------------------------------
             $(".btn-success").click(function () {
 
                 $("#container").html("");
@@ -63,69 +65,56 @@
                         continue;
                     $("#records").append("<tr> <td> " + key +  " </td>  <td> " + localStorage[key] + " </td> </tr>");
                 }
-
                 $("#records").append('</tbody>');
-
             });
 
-            //FUNTION OPEN CARD
+             //---------------------------------------------------------
+             //FUNTION OPEN CARD
+             //---------------------------------------------------------
             $("#container").on("click", ".card", function() {
                 var that = this;
-                var x = this.getAttribute("val");
+                var x = $(this).html();
 
                 this.className = "card card-clicked x" + x;
 
                 moves = moves + 1;
-                $("#player").html(window.user+" - "+ score + "/" + moves);
+                $("#info").html(user+" - "+ score + "/" + moves);
 
                 if (card1) {
-                    var x1 = card1.getAttribute("val");
+                    var x1 = $(card1).html();
                     if (x==x1) {
-                        // card1.className = "card-opened";
-                        // this.className = "card-opened";
                         score = score + 2;
-                        $("#player").html(window.user+" - "+ score + "/" + moves);
-                        window.localStorage.setItem(window.user, score);
+                        $("#info").html(user+" - "+ score + "/" + moves);
+                        localStorage.setItem(user, score);
                         card1 = "";
                     } else {
                         setTimeout(function(){
                             card1.className = "card";
                             that.className = "card";
                             card1 = "";
-                        }, 500);
-                        
-
-                        
+                        }, 500);   
                     }
                 } else {
                     card1 = this;
-                }
-                
+                } 
             });
         });
 
     </script>
-
-
     </head>
-<body>
 
-
- <div id="div0">
-    <h1>
-        <img src="https://openclipart.org/download/286081/Memo--Arvin61r58.svg" alt="Smiley face" height="150" width="150">
-        Memo Game
-    </h1>
-     <input type="button" class="btn btn-primary" value="New game" />
-     <input type="button" class="btn btn-danger" value="Clear" />
-     <input type="button" class="btn btn-success" value="Records" />
-     <div id="player"></div>
-</div>
- <table id="records" class="table table-striped"></table>
- <div id="container">
-
- </div>
-</body>
+    <body>
+        <div id="header">
+            <h1>
+                <img src="https://openclipart.org/download/286081/Memo--Arvin61r58.svg" alt="Smiley face" height="150" width="150">
+                Memo Game
+            </h1>
+             <input type="button" class="btn btn-primary" value="New game" />
+             <input type="button" class="btn btn-danger" value="Clear" />
+             <input type="button" class="btn btn-success" value="Records" />
+             <div id="info"></div>
+        </div>
+        <table id="records" class="table table-striped"></table>
+        <div id="container"></div>
+    </body>
 </html>
-
-
